@@ -4,23 +4,33 @@ import { Button } from '@/components/ui/button'
 import AppNavigationMenu from '@/components/navbar'
 import { Input } from '@/components/ui/input'
 import { toast } from "sonner"
+import { useRooms } from './hooks/useRooms'
+import { RoomAdminScreen } from './components/room-admin-screen'
 
 
 function App() {
   const [username, setUsername] = useState('')
+  const { createRoom, ownerId } = useRooms()
 
   const checkUsername = () => {
     if (!username) {
       toast.warning('Please enter the username')
+      return false;
     }
+    return true;
   }
 
   const onCreateRoom = () => {
-    checkUsername()
+    if (checkUsername())
+      createRoom(username)
   }
 
   const onJoinRoom = () => {
     checkUsername()
+  }
+
+  if (ownerId) {
+    return <RoomAdminScreen />;
   }
 
   return (
